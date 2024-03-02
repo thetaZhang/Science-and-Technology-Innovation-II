@@ -113,8 +113,8 @@ vector<float> long_time_hr(const vector<float>& data, float f) { //入参为数�
     vector<float> hr;//定义心率数组
     float hr_0;
     //自行编写
-    for (int i=0;i < data.size() - cal_window*f;i+=sli_window*f){
-        const std::vector <float>& part_peak =std::vector<float>(data.begin() + i, data.begin() + i + cal_window*f);
+    for (int i=0;i <= data.size() - cal_window*f;i+=sli_window*f){
+        const std::vector <float>& part_peak =std::vector<float>(data.begin() + i, data.begin() + i + cal_window*f-1);
 
         if (hr.empty()) {
             hr_0=cal_hr(70,part_peak,f);
@@ -131,7 +131,7 @@ vector<float> long_time_hr(const vector<float>& data, float f) { //入参为数�
 float cal_error(float hr_0, float hr_1) {
     float mae;
     //自行编写
-    
+
     return mae;
 }
 
