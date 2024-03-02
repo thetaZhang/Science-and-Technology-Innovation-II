@@ -4,6 +4,9 @@
 #include <numeric> // 包含 accumulate 函数
 using namespace std;
 
+#define cal_window 8
+#define sli_window 1
+
 //自定义的平均值函数
 float mean(const std::vector<float>& data) {
     // 使用 accumulate 计算总和
@@ -110,6 +113,17 @@ vector<float> long_time_hr(const vector<float>& data, float f) { //入参为数�
     vector<float> hr;//定义心率数组
     float hr_0;
     //自行编写
+    for (int i=0;i < data.size() - cal_window*f;i+=sli_window*f){
+        const std::vector <float>& part_peak =std::vector<float>(data.begin() + i, data.begin() + i + cal_window*f);
+
+        if (hr.empty()) {
+            hr_0=cal_hr(70,part_peak,f);
+        }
+        else {
+            hr_0=cal_hr(hr.back(),part_peak,f);
+        }
+        hr.push_back(hr_0);
+    }
     return hr;
 }
 
@@ -117,12 +131,13 @@ vector<float> long_time_hr(const vector<float>& data, float f) { //入参为数�
 float cal_error(float hr_0, float hr_1) {
     float mae;
     //自行编写
+    
     return mae;
 }
 
 int main() {
     // 打开数据文件
-    std::ifstream inputFile("./lab1-data/ppg_idel_8s.txt");// 通过标准库的ifstream函数读取txt文件
+    std::ifstream inputFile("E:/works/Science and Technology Innovation/lab1/lab1-data/ppg_spc_8s.txt");// 通过标准库的ifstream函数读取txt文件
     if (!inputFile.is_open()) {                             //排除txt文件出现错误的情况
         std::cerr << "Unable to open file!" << std::endl;
         return 1;
