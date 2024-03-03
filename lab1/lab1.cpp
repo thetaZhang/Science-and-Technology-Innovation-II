@@ -98,6 +98,9 @@ float cal_hr(float last_hr, std::vector<float> peaks, float f) { //引入历史�
     if (peaks.back() - peaks.front() != 0) {
         // 根据公式计算心率
         hr = f / (peaks.back() - peaks.front()) * (peaks.size() - 1) * 60;
+        if (hr-last_hr>5.0||last_hr-hr>5.0||hr<40.0||hr>200.0) {
+            hr = last_hr;
+        }
     } else {
         hr = last_hr;//可增加超参数限制逻辑，心率的上升速度，最大最小心率等
     }
@@ -114,8 +117,8 @@ vector<float> long_time_hr(const vector<float>& data, float f) { //入参为数�
     float hr_0;
     //自行编写
     for (int i=0;i <= data.size() - cal_window*f;i+=sli_window*f){
-        const std::vector <float>& part_peak =std::vector<float>(data.begin() + i, data.begin() + i + cal_window*f-1);
-
+        const std::vector <float>& part_data =std::vector<float>(data.begin() + i, data.begin() + i + cal_window*f-1);
+        std::vector <float> part_peak=find_peaks_threshold(part_data,0.7);
         if (hr.empty()) {
             hr_0=cal_hr(70,part_peak,f);
         }
@@ -137,7 +140,7 @@ float cal_error(float hr_0, float hr_1) {
 
 int main() {
     // 打开数据文件
-    std::ifstream inputFile("E:/works/Science and Technology Innovation/lab1/lab1-data/ppg_spc_8s.txt");// 通过标准库的ifstream函数读取txt文件
+    std::ifstream inputFile("E:/works/Science and Technology Innovation/lab1/lab1-data/ppg_idel_480s.txt");// 通过标准库的ifstream函数读取txt文件
     if (!inputFile.is_open()) {                             //排除txt文件出现错误的情况
         std::cerr << "Unable to open file!" << std::endl;
         return 1;
@@ -151,14 +154,20 @@ int main() {
     }
     inputFile.close();                                  //关闭txt文件，此时ppg数据以及存储在ppgData数组中
     
-    // 进行峰值检测
-    std::vector<float> peakPositions = find_peaks(ppgData);
+    // 峰值检测和计算心率
+    std::vector<float> hr_cal = long_time_hr(ppgData,125);
 
-    // 打印峰值位置
-    std::cout << "Peak positions:" << std::endl;
-    for (int position : peakPositions) {
-        std::cout << position << std::endl;
+    //输出心率
+    std::ofstream outputfile;
+    outputfile.open("E:/works/Science and Technology Innovation/lab1/out.txt");
+    if (!outputfile) {
+        std::cerr << "Unable to open output file!" << std::endl;
+         return 1;
     }
+    for(int i=0;i<hr_cal.size();++i){
+        outputfile << hr_cal[i]<< std::endl;
+    }
+    outputfile.close();
 
 
 
