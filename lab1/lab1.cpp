@@ -142,8 +142,8 @@ float cal_error(float hr_0, float hr_1) {
 
 int main() {
     // 打开数据文件
-    std::ifstream inputFile("E:/works/Science and Technology Innovation/lab1/lab1-data/ppg_real_jz.txt");// 通过标准库的ifstream函数读取txt文件
-    if (!inputFile.is_open()) {                             //排除txt文件出现错误的情况
+    std::ifstream inputFile1("E:/works/Science and Technology Innovation/lab1/lab1-data/ppg_real_jz.txt");// 通过标准库的ifstream函数读取txt文件
+    if (!inputFile1.is_open()) {                             //排除txt文件出现错误的情况
         std::cerr << "Unable to open file!" << std::endl;
         return 1;
     }
@@ -151,17 +151,17 @@ int main() {
     // 读取PPG数据
     vector<float> ppgData1;                              //定义浮点数组变量ppgData
     float value1;                                        //临时的浮点数，存储文件流中的每一行数据
-    while (inputFile >> value1) {
+    while (inputFile1 >> value1) {
         ppgData1.push_back(value1);                       //push_back将最新的ppg数据放在数组尾部
     }
-    inputFile.close();                                  //关闭txt文件，此时ppg数据以及存储在ppgData数组中
+    inputFile1.close();                                  //关闭txt文件，此时ppg数据以及存储在ppgData数组中
     
     // 峰值检测和计算心率
     std::vector<float> hr_cal_1 = long_time_hr(ppgData1,125);
 
     // 打开数据文件
-    std::ifstream inputFile("E:/works/Science and Technology Innovation/lab1/lab1-data/ppg_real_jz_2.txt");// 通过标准库的ifstream函数读取txt文件
-    if (!inputFile.is_open()) {                             //排除txt文件出现错误的情况
+    std::ifstream inputFile2("E:/works/Science and Technology Innovation/lab1/lab1-data/ppg_real_jz_2.txt");// 通过标准库的ifstream函数读取txt文件
+    if (!inputFile2.is_open()) {                             //排除txt文件出现错误的情况
         std::cerr << "Unable to open file!" << std::endl;
         return 1;
     }
@@ -169,37 +169,37 @@ int main() {
     // 读取PPG数据
     vector<float> ppgData2;                              //定义浮点数组变量ppgData
     float value2;                                        //临时的浮点数，存储文件流中的每一行数据
-    while (inputFile >> value2) {
+    while (inputFile2 >> value2) {
         ppgData2.push_back(value2);                       //push_back将最新的ppg数据放在数组尾部
     }
-    inputFile.close();                                  //关闭txt文件，此时ppg数据以及存储在ppgData数组中
+    inputFile2.close();                                  //关闭txt文件，此时ppg数据以及存储在ppgData数组中
     
     // 峰值检测和计算心率
     std::vector<float> hr_cal_2 = long_time_hr(ppgData2,125);
     
 
     //输出心率
-    std::ofstream outputfile;
-    outputfile.open("E:/works/Science and Technology Innovation/lab1/out1.txt");
-    if (!outputfile) {
+    std::ofstream outputfile1;
+    outputfile1.open("E:/works/Science and Technology Innovation/lab1/out1.txt");
+    if (!outputfile1) {
         std::cerr << "Unable to open output file!" << std::endl;
          return 1;
     }
     for(int i=0;i<hr_cal_1.size();++i){
-        outputfile << std::round(hr_cal_1[i])<< std::endl;
+        outputfile1 << std::round(hr_cal_1[i])<< std::endl;
     }
-    outputfile.close();
+    outputfile1.close();
 
-    std::ofstream outputfile;
-    outputfile.open("E:/works/Science and Technology Innovation/lab1/out2.txt");
-    if (!outputfile) {
+    std::ofstream outputfile2;
+    outputfile2.open("E:/works/Science and Technology Innovation/lab1/out2.txt");
+    if (!outputfile2) {
         std::cerr << "Unable to open output file!" << std::endl;
          return 1;
     }
     for(int i=0;i<hr_cal_2.size();++i){
-        outputfile << std::round(hr_cal_2[i])<< std::endl;
+        outputfile2 << std::round(hr_cal_2[i])<< std::endl;
     }
-    outputfile.close();
+    outputfile2.close();
 
 
 
