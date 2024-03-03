@@ -2,10 +2,11 @@
 #include <vector>//标准数组库
 #include <fstream>//有关文件读取
 #include <numeric> // 包含 accumulate 函数
+#include <cmath>
 using namespace std;
 
 #define cal_window 8
-#define sli_window 1
+#define sli_window 2
 
 //自定义的平均值函数
 float mean(const std::vector<float>& data) {
@@ -94,11 +95,12 @@ vector<float> find_peaks_after_sliding(const vector<float>& data) {
 // 通过峰值计算心率
 float cal_hr(float last_hr, std::vector<float> peaks, float f) { //引入历史心率，在峰值消失或者不满足超参数时使用
     float hr;
+    static int count=1;
     if (peaks.size()>0){//防止该段信号没有峰值
     if (peaks.back() - peaks.front() != 0) {
         // 根据公式计算心率
         hr = f / (peaks.back() - peaks.front()) * (peaks.size() - 1) * 60;
-        if (hr-last_hr>5.0||last_hr-hr>5.0||hr<40.0||hr>200.0) {
+        if ((hr-last_hr>5.0 && count!=1)||(last_hr-hr>5.0 && count!=1)||hr<40.0||hr>200.0) {
             hr = last_hr;
         }
     } else {
@@ -107,7 +109,7 @@ float cal_hr(float last_hr, std::vector<float> peaks, float f) { //引入历史�
     }else{
         hr = last_hr;
     }
-
+    count++;
     return hr;
 }
 
@@ -118,7 +120,7 @@ vector<float> long_time_hr(const vector<float>& data, float f) { //入参为数�
     //自行编写
     for (int i=0;i <= data.size() - cal_window*f;i+=sli_window*f){
         const std::vector <float>& part_data =std::vector<float>(data.begin() + i, data.begin() + i + cal_window*f-1);
-        std::vector <float> part_peak=find_peaks_threshold(part_data,0.7);
+        std::vector <float> part_peak=find_peaks_after_sliding(part_data);
         if (hr.empty()) {
             hr_0=cal_hr(70,part_peak,f);
         }
@@ -134,38 +136,68 @@ vector<float> long_time_hr(const vector<float>& data, float f) { //入参为数�
 float cal_error(float hr_0, float hr_1) {
     float mae;
     //自行编写
-
+    mae=fabsf(hr_0-hr_1);
     return mae;
 }
 
 int main() {
     // 打开数据文件
-    std::ifstream inputFile("E:/works/Science and Technology Innovation/lab1/lab1-data/ppg_idel_480s.txt");// 通过标准库的ifstream函数读取txt文件
+    std::ifstream inputFile("E:/works/Science and Technology Innovation/lab1/lab1-data/ppg_real_jz.txt");// 通过标准库的ifstream函数读取txt文件
     if (!inputFile.is_open()) {                             //排除txt文件出现错误的情况
         std::cerr << "Unable to open file!" << std::endl;
         return 1;
     }
 
     // 读取PPG数据
-    vector<float> ppgData;                              //定义浮点数组变量ppgData
-    float value;                                        //临时的浮点数，存储文件流中的每一行数据
-    while (inputFile >> value) {
-        ppgData.push_back(value);                       //push_back将最新的ppg数据放在数组尾部
+    vector<float> ppgData1;                              //定义浮点数组变量ppgData
+    float value1;                                        //临时的浮点数，存储文件流中的每一行数据
+    while (inputFile >> value1) {
+        ppgData1.push_back(value1);                       //push_back将最新的ppg数据放在数组尾部
     }
     inputFile.close();                                  //关闭txt文件，此时ppg数据以及存储在ppgData数组中
     
     // 峰值检测和计算心率
-    std::vector<float> hr_cal = long_time_hr(ppgData,125);
+    std::vector<float> hr_cal_1 = long_time_hr(ppgData1,125);
+
+    // 打开数据文件
+    std::ifstream inputFile("E:/works/Science and Technology Innovation/lab1/lab1-data/ppg_real_jz_2.txt");// 通过标准库的ifstream函数读取txt文件
+    if (!inputFile.is_open()) {                             //排除txt文件出现错误的情况
+        std::cerr << "Unable to open file!" << std::endl;
+        return 1;
+    }
+
+    // 读取PPG数据
+    vector<float> ppgData2;                              //定义浮点数组变量ppgData
+    float value2;                                        //临时的浮点数，存储文件流中的每一行数据
+    while (inputFile >> value2) {
+        ppgData2.push_back(value2);                       //push_back将最新的ppg数据放在数组尾部
+    }
+    inputFile.close();                                  //关闭txt文件，此时ppg数据以及存储在ppgData数组中
+    
+    // 峰值检测和计算心率
+    std::vector<float> hr_cal_2 = long_time_hr(ppgData2,125);
+    
 
     //输出心率
     std::ofstream outputfile;
-    outputfile.open("E:/works/Science and Technology Innovation/lab1/out.txt");
+    outputfile.open("E:/works/Science and Technology Innovation/lab1/out1.txt");
     if (!outputfile) {
         std::cerr << "Unable to open output file!" << std::endl;
          return 1;
     }
-    for(int i=0;i<hr_cal.size();++i){
-        outputfile << hr_cal[i]<< std::endl;
+    for(int i=0;i<hr_cal_1.size();++i){
+        outputfile << std::round(hr_cal_1[i])<< std::endl;
+    }
+    outputfile.close();
+
+    std::ofstream outputfile;
+    outputfile.open("E:/works/Science and Technology Innovation/lab1/out2.txt");
+    if (!outputfile) {
+        std::cerr << "Unable to open output file!" << std::endl;
+         return 1;
+    }
+    for(int i=0;i<hr_cal_2.size();++i){
+        outputfile << std::round(hr_cal_2[i])<< std::endl;
     }
     outputfile.close();
 
