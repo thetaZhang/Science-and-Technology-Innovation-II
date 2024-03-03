@@ -93,23 +93,25 @@ vector<float> find_peaks_after_sliding(const vector<float>& data) {
 }
 
 // 通过峰值计算心率
-float cal_hr(float last_hr, std::vector<float> peaks, float f) { //引入历史心率，在峰值消失或者不满足超参数时使用
+float cal_hr(float last_hr, std::vector<float> peaks, float f,int count) { //引入历史心率，在峰值消失或者不满足超参数时使用
     float hr;
-    static int count=1;
+    
     if (peaks.size()>0){//防止该段信号没有峰值
     if (peaks.back() - peaks.front() != 0) {
         // 根据公式计算心率
         hr = f / (peaks.back() - peaks.front()) * (peaks.size() - 1) * 60;
+        
         if ((hr-last_hr>5.0 && count!=1)||(last_hr-hr>5.0 && count!=1)||hr<40.0||hr>200.0) {
             hr = last_hr;
         }
+        
     } else {
         hr = last_hr;//可增加超参数限制逻辑，心率的上升速度，最大最小心率等
     }
     }else{
         hr = last_hr;
     }
-    count++;
+   
     return hr;
 }
 
@@ -122,10 +124,10 @@ vector<float> long_time_hr(const vector<float>& data, float f) { //入参为数�
         const std::vector <float>& part_data =std::vector<float>(data.begin() + i, data.begin() + i + cal_window*f-1);
         std::vector <float> part_peak=find_peaks_after_sliding(part_data);
         if (hr.empty()) {
-            hr_0=cal_hr(70,part_peak,f);
+            hr_0=cal_hr(70,part_peak,f,1);
         }
         else {
-            hr_0=cal_hr(hr.back(),part_peak,f);
+            hr_0=cal_hr(hr.back(),part_peak,f,2);
         }
         hr.push_back(hr_0);
     }
@@ -189,7 +191,7 @@ int main() {
         outputfile1 << std::round(hr_cal_1[i])<< std::endl;
     }
     outputfile1.close();
-
+   
     std::ofstream outputfile2;
     outputfile2.open("E:/works/Science and Technology Innovation/lab1/out2.txt");
     if (!outputfile2) {
