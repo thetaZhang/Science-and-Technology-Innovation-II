@@ -102,6 +102,7 @@ float cal_hr(float last_hr, std::vector<float> peaks, std::vector<float> values,
     if (peaks.back() - peaks.front() != 0) {
         
         hr =  f / (peaks.back() - peaks.front()) * (peaks.size() - 1) * 60;
+        //超参数设定
         if (hr<40.0||(last_hr-hr>=10.0 && count!=1)) {hr = last_hr;}
         while ((hr-last_hr>=10.0 && count!=1)||hr>200.0) {
             int min_value=min_element(values.begin(),values.end())-values.begin();
