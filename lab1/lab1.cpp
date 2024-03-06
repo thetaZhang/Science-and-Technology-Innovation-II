@@ -89,7 +89,7 @@ vector<float> find_peaks_threshold_par(const vector<float>& data, float f) {
 //峰值检测--滑动窗口
 vector<float> find_peaks_after_sliding(const vector<float>& data) {
     const vector<float>& slide_data=sliding(data,10); //首先对data进行10的窗口平均
-    vector<float> peaks = find_peaks_threshold(slide_data,1.2);//再对平均后的数据进行峰值检测
+    vector<float> peaks = find_peaks_threshold(slide_data,0.5);//再对平均后的数据进行峰值检测
 
     return peaks;
 }
@@ -103,11 +103,12 @@ float cal_hr(float last_hr, std::vector<float> peaks, std::vector<float> values,
         
         hr =  f / (peaks.back() - peaks.front()) * (peaks.size() - 1) * 60;
         //超参数设定
-        if (hr<40.0||(last_hr-hr>=10.0 && count!=1)) {hr = last_hr;}
+        if (hr<40.0||(last_hr-hr>=10.0 && count!=1)) {hr=last_hr-10.0; }
         while ((hr-last_hr>=10.0 && count!=1)||hr>200.0) {
             int min_value=min_element(values.begin(),values.end())-values.begin();
             peaks.erase(peaks.begin()+min_value);
             values.erase(values.begin()+min_value);
+             if (peaks.back()==peaks.front()) {break;}
             hr =  f / (peaks.back() - peaks.front()) * (peaks.size() - 1) * 60;
         }
         
