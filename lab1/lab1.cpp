@@ -163,7 +163,7 @@ float cal_error(float hr_0, float hr_1) {
 
 int main() {
     // 打开数据文件
-    std::ifstream inputFile1("E:/works/Science and Technology Innovation/lab1/lab1-data/ppg_real_jz.txt");// 通过标准库的ifstream函数读取txt文件
+    std::ifstream inputFile1("lab1-data/ppg_real_jz.txt");// 通过标准库的ifstream函数读取txt文件
     if (!inputFile1.is_open()) {                             //排除txt文件出现错误的情况
         std::cerr << "Unable to open file!" << std::endl;
         return 1;
@@ -181,7 +181,7 @@ int main() {
     std::vector<float> hr_cal_1 = long_time_hr(ppgData1,125);
 
     // 打开数据文件
-    std::ifstream inputFile2("E:/works/Science and Technology Innovation/lab1/lab1-data/ppg_real_jz_2.txt");// 通过标准库的ifstream函数读取txt文件
+    std::ifstream inputFile2("lab1-data/ppg_real_jz_2.txt");// 通过标准库的ifstream函数读取txt文件
     if (!inputFile2.is_open()) {                             //排除txt文件出现错误的情况
         std::cerr << "Unable to open file!" << std::endl;
         return 1;
@@ -201,7 +201,7 @@ int main() {
 
     //输出心率
     std::ofstream outputfile1;
-    outputfile1.open("E:/works/Science and Technology Innovation/lab1/out1.txt");
+    outputfile1.open("out1.txt");
     if (!outputfile1) {
         std::cerr << "Unable to open output file!" << std::endl;
          return 1;
@@ -212,7 +212,7 @@ int main() {
     outputfile1.close();
    
     std::ofstream outputfile2;
-    outputfile2.open("E:/works/Science and Technology Innovation/lab1/out2.txt");
+    outputfile2.open("out2.txt");
     if (!outputfile2) {
         std::cerr << "Unable to open output file!" << std::endl;
          return 1;
