@@ -88,8 +88,8 @@ vector<float> find_peaks_threshold_par(const vector<float>& data, float f) {
 
 //峰值检测--滑动窗口
 vector<float> find_peaks_after_sliding(const vector<float>& data) {
-    const vector<float>& slide_data=sliding(data,10); //首先对data进行10的窗口平均
-    vector<float> peaks = find_peaks_threshold(slide_data,0.5);//再对平均后的数据进行峰值检测
+    const vector<float>& slide_data=sliding(data,15); //首先对data进行10的窗口平均
+    vector<float> peaks = find_peaks_threshold(slide_data,1.0);//再对平均后的数据进行峰值检测
 
     return peaks;
 }
