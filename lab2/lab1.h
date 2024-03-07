@@ -6,8 +6,8 @@ using namespace std;
 #define _USE_MATH_DEFINES
 #include <iostream>
 #include <cmath>
-#include "matplotlibcpp.h"
-namespace plt = matplotlibcpp;
+//#include "matplotlibcpp.h"
+//namespace plt = matplotlibcpp;
 
 double mean(const std::vector<double>& data) {
     // 使用 accumulate 计算总和
