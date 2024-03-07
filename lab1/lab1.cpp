@@ -103,7 +103,7 @@ float cal_hr(float last_hr, std::vector<float> peaks, std::vector<float> values,
         
         hr =  f / (peaks.back() - peaks.front()) * (peaks.size() - 1) * 60;
         //超参数设定
-        if (hr<40.0||(last_hr-hr>=10.0 && count!=1)) {hr=last_hr-10.0; }
+        if (hr<40.0||(last_hr-hr>=10.0 && count!=1)) {hr=last_hr-5.0; }
         while ((hr-last_hr>=10.0 && count!=1)||hr>200.0) {
             int min_value=min_element(values.begin(),values.end())-values.begin();
             peaks.erase(peaks.begin()+min_value);
@@ -111,7 +111,7 @@ float cal_hr(float last_hr, std::vector<float> peaks, std::vector<float> values,
              if (peaks.back()==peaks.front()) {break;}
             hr =  f / (peaks.back() - peaks.front()) * (peaks.size() - 1) * 60;
         }
-        if ((hr-last_hr>=10.0 && count!=1)||hr>200.0) {hr=last_hr;}
+        if ((hr-last_hr>=10.0 && count!=1)||hr>200.0) {hr=last_hr+5;}
 
          
     } else {
