@@ -2,3 +2,4 @@
 /cppproject/.vscode
 *.exe
 **/debug/*
+**/.qtc_clangd/*
