@@ -200,6 +200,7 @@ Makefile: ..\QT-project\QT-project.pro D:\QT\6.2.4\msvc2019_64\mkspecs\win32-msv
 		D:\QT\6.2.4\msvc2019_64\mkspecs\features\qt_config.prf \
 		D:\QT\6.2.4\msvc2019_64\mkspecs\win32-msvc\qmake.conf \
 		D:\QT\6.2.4\msvc2019_64\mkspecs\features\spec_post.prf \
+		.qmake.stash \
 		D:\QT\6.2.4\msvc2019_64\mkspecs\features\exclusive_builds.prf \
 		D:\QT\6.2.4\msvc2019_64\mkspecs\common\msvc-version.conf \
 		D:\QT\6.2.4\msvc2019_64\mkspecs\features\toolchain.prf \
@@ -226,13 +227,18 @@ Makefile: ..\QT-project\QT-project.pro D:\QT\6.2.4\msvc2019_64\mkspecs\win32-msv
 		D:\QT\6.2.4\msvc2019_64\mkspecs\features\yacc.prf \
 		D:\QT\6.2.4\msvc2019_64\mkspecs\features\lex.prf \
 		..\QT-project\QT-project.pro \
+		D:\QT\6.2.4\msvc2019_64\lib\Qt6Charts.prl \
+		D:\QT\6.2.4\msvc2019_64\lib\Qt6OpenGLWidgets.prl \
 		D:\QT\6.2.4\msvc2019_64\lib\Qt6Widgets.prl \
+		D:\QT\6.2.4\msvc2019_64\lib\Qt6OpenGL.prl \
 		D:\QT\6.2.4\msvc2019_64\lib\Qt6Gui.prl \
 		D:\QT\6.2.4\msvc2019_64\lib\Qt6Core.prl \
 		D:\QT\6.2.4\msvc2019_64\lib\Qt6EntryPoint.prl \
-		.qmake.stash \
 		D:\QT\6.2.4\msvc2019_64\mkspecs\features\build_pass.prf \
+		D:\QT\6.2.4\msvc2019_64\lib\Qt6Chartsd.prl \
+		D:\QT\6.2.4\msvc2019_64\lib\Qt6OpenGLWidgetsd.prl \
 		D:\QT\6.2.4\msvc2019_64\lib\Qt6Widgetsd.prl \
+		D:\QT\6.2.4\msvc2019_64\lib\Qt6OpenGLd.prl \
 		D:\QT\6.2.4\msvc2019_64\lib\Qt6Guid.prl \
 		D:\QT\6.2.4\msvc2019_64\lib\Qt6Cored.prl \
 		D:\QT\6.2.4\msvc2019_64\lib\Qt6EntryPointd.prl
@@ -353,6 +359,7 @@ D:\QT\6.2.4\msvc2019_64\mkspecs\features\qt_functions.prf:
 D:\QT\6.2.4\msvc2019_64\mkspecs\features\qt_config.prf:
 D:\QT\6.2.4\msvc2019_64\mkspecs\win32-msvc\qmake.conf:
 D:\QT\6.2.4\msvc2019_64\mkspecs\features\spec_post.prf:
+.qmake.stash:
 D:\QT\6.2.4\msvc2019_64\mkspecs\features\exclusive_builds.prf:
 D:\QT\6.2.4\msvc2019_64\mkspecs\common\msvc-version.conf:
 D:\QT\6.2.4\msvc2019_64\mkspecs\features\toolchain.prf:
@@ -379,13 +386,18 @@ D:\QT\6.2.4\msvc2019_64\mkspecs\features\exceptions.prf:
 D:\QT\6.2.4\msvc2019_64\mkspecs\features\yacc.prf:
 D:\QT\6.2.4\msvc2019_64\mkspecs\features\lex.prf:
 ..\QT-project\QT-project.pro:
+D:\QT\6.2.4\msvc2019_64\lib\Qt6Charts.prl:
+D:\QT\6.2.4\msvc2019_64\lib\Qt6OpenGLWidgets.prl:
 D:\QT\6.2.4\msvc2019_64\lib\Qt6Widgets.prl:
+D:\QT\6.2.4\msvc2019_64\lib\Qt6OpenGL.prl:
 D:\QT\6.2.4\msvc2019_64\lib\Qt6Gui.prl:
 D:\QT\6.2.4\msvc2019_64\lib\Qt6Core.prl:
 D:\QT\6.2.4\msvc2019_64\lib\Qt6EntryPoint.prl:
-.qmake.stash:
 D:\QT\6.2.4\msvc2019_64\mkspecs\features\build_pass.prf:
+D:\QT\6.2.4\msvc2019_64\lib\Qt6Chartsd.prl:
+D:\QT\6.2.4\msvc2019_64\lib\Qt6OpenGLWidgetsd.prl:
 D:\QT\6.2.4\msvc2019_64\lib\Qt6Widgetsd.prl:
+D:\QT\6.2.4\msvc2019_64\lib\Qt6OpenGLd.prl:
 D:\QT\6.2.4\msvc2019_64\lib\Qt6Guid.prl:
 D:\QT\6.2.4\msvc2019_64\lib\Qt6Cored.prl:
 D:\QT\6.2.4\msvc2019_64\lib\Qt6EntryPointd.prl:
