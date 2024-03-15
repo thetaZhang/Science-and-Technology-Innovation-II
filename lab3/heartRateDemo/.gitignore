@@ -1,10 +1,6 @@
-/.vscode
-/cppproject/.vscode
-*.exe
-**/debug/*
-**/.qtc_clangd/*
+# This file is used to ignore files which are generated
+# ----------------------------------------------------------------------------
 
-#Qt ignore
 *~
 *.autosave
 *.a
