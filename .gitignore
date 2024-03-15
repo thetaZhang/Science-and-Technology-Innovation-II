@@ -76,3 +76,11 @@ CMakeLists.txt.user*
 *.dll
 *.exe
 
+
+# LaTex ignore
+*.aux
+*.bbl
+*.log
+*.out
+*.synctex.gz
+

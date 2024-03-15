@@ -134,7 +134,7 @@ vector<double> long_time_hr_fft(const vector<double>& data, double f) {
 // 主函数
 int main() {
         // 打开数据文件
-    std::ifstream inputFile("E:/works/Science and Technology Innovation/lab2/lab2-data/ppg_real_jz.txt");
+    std::ifstream inputFile("E:/works/Science and Technology Innovation/lab2/lab2-data/ppg_noise.txt");
     if (!inputFile.is_open()) {
         std::cerr << "Unable to open file!" << std::endl;
         return 1;
