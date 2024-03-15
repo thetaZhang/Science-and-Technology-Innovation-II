@@ -4,6 +4,7 @@
 #include <cmath>
 #include <fstream>
 #include "lab1.h"
+#include "matplotlibcpp.h"
 
 using namespace std;
 const double PI = 3.14159265358979323846;
