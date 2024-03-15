@@ -1,3 +1,4 @@
 /.vscode
 /cppproject/.vscode
 *.exe
+**/debug/*
