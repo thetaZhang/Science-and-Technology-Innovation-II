@@ -157,7 +157,7 @@ vector<double> long_time_hr_fft(const vector<double>& data, double f) {
 // 主函数
 int main() {
         // 打开数据文件
-    std::ifstream inputFile("E:/works/Science and Technology Innovation/lab2/lab2-data/ppg_noise.txt");
+    std::ifstream inputFile("E:/works/Science and Technology Innovation/lab2/lab2-data/ppg_noise_ma.txt");
     if (!inputFile.is_open()) {
         std::cerr << "Unable to open file!" << std::endl;
         return 1;
@@ -181,18 +181,43 @@ int main() {
     std::vector<double> hr_fft = long_time_hr_fft(ppgData_fliter,125);
 
     // 输出结果
-    cout << "心率结果：" << endl;
-    for (int i = 0; i < hr_peaks.size(); ++i) {
-        cout << "HR(" << i << ") = " << hr_peaks[i] << endl;
+    std::ofstream outputfile1;
+    outputfile1.open("E:/works/Science and Technology Innovation/lab2/out_peaks.txt");
+    if (!outputfile1) {
+        std::cerr << "Unable to open output file!" << std::endl;
+         return 1;
     }
-    cout << "心率结果：" << endl;
-    for (int i = 0; i < hr_fliter.size(); ++i) {
-        cout << "HR(" << i << ") = " << hr_fliter[i] << endl;
+    for(int i=0;i<hr_peaks.size();++i){
+        outputfile1 <<hr_peaks[i]<< std::endl;
     }
-    cout << "心率结果：" << endl;
-    for (int i = 0; i < hr_fft.size(); ++i) {
-        cout << "HR(" << i << ") = " << hr_fft[i] << endl;
+    outputfile1.close();
+
+    std::ofstream outputfile2;
+    outputfile2.open("E:/works/Science and Technology Innovation/lab2/out_fliter_peaks.txt");
+    if (!outputfile2) {
+        std::cerr << "Unable to open output file!" << std::endl;
+         return 1;
     }
+    for(int i=0;i<hr_fliter.size();++i){
+        outputfile2 <<hr_fliter[i]<< std::endl;
+    }
+    outputfile2.close();
+   
+    std::ofstream outputfile3;
+    outputfile3.open("E:/works/Science and Technology Innovation/lab2/out_fft.txt");
+    if (!outputfile3) {
+        std::cerr << "Unable to open output file!" << std::endl;
+         return 1;
+    }
+    for(int i=0;i<hr_fft.size();++i){
+        outputfile3 <<hr_fft[i]<< std::endl;
+    }
+    outputfile3.close();
+   
+
+ 
+
+    
 
     //尝试单独输出某一段PPG信号的FFT结果并打印
     //ppgData_fliter_part=？
