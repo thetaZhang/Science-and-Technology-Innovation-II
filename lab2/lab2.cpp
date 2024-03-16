@@ -4,6 +4,9 @@
 #include <cmath>
 #include <fstream>
 #include "lab1.h"
+#include "matplotlibcpp.h"
+
+namespace plt = matplotlibcpp;
 
 using namespace std;
 const double PI = 3.14159265358979323846;
@@ -126,6 +129,26 @@ vector<double> long_time_hr_fft(const vector<double>& data, double f) {
         }
         hr_0 = maxIndex*f/4096*60;
         //自行添加心率限制，连续计算的心率变化不超过5bpm
+        /*
+        while (hr.size()>=1&&hr_0-hr.back()>=5.0) {
+            maxIndex--;
+            for (i=maxIndex;i>= int(0.4*4096/f)+1; i--) {
+                if (signal[i] > signal[maxIndex]) {
+                    maxIndex = i;//更新峰值
+                }
+            }
+            hr_0=maxIndex*f/4096*60;
+        }
+        while (hr.size()>=1&&hr.back()-hr_0>=5.0) {
+            maxIndex++;
+            for (i=maxIndex;i<= int(4*4096/f)+1; i++) {
+                if (signal[i] > signal[maxIndex]) {
+                    maxIndex = i;//更新峰值
+                }
+            }
+            hr_0=maxIndex*f/4096*60;
+        }
+        */
         hr.push_back(hr_0);
     }
     return hr;
