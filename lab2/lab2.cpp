@@ -181,9 +181,9 @@ int main() {
     vector<double> b={ 0.00005346553295137725, 0, -0.000213862131805509,  0, 0.0003207931977082635, 0, -0.000213862131805509,  0, 0.00005346553295137725};
 
     std::vector<double> hr_peaks = long_time_hr(ppgData,125);
-    vector<double> ppgData_fliter=filter_a(b,a,ppgData);
-    std::vector<double> hr_fliter = long_time_hr(ppgData_fliter,125);
-    std::vector<double> hr_fft = long_time_hr_fft(ppgData_fliter,125);
+    vector<double> ppgData_filter=filter_a(b,a,ppgData);
+    std::vector<double> hr_filter = long_time_hr(ppgData_filter,125);
+    std::vector<double> hr_fft = long_time_hr_fft(ppgData_filter,125);
 
     // 输出结果
     std::ofstream outputfile1;
@@ -198,13 +198,13 @@ int main() {
     outputfile1.close();
 
     std::ofstream outputfile2;
-    outputfile2.open("E:/works/Science and Technology Innovation/lab2/out_fliter_peaks.txt");
+    outputfile2.open("E:/works/Science and Technology Innovation/lab2/out_filter_peaks.txt");
     if (!outputfile2) {
         std::cerr << "Unable to open output file!" << std::endl;
          return 1;
     }
-    for(int i=0;i<hr_fliter.size();++i){
-        outputfile2 <<hr_fliter[i]<< std::endl;
+    for(int i=0;i<hr_filter.size();++i){
+        outputfile2 <<hr_filter[i]<< std::endl;
     }
     outputfile2.close();
    
@@ -226,7 +226,7 @@ int main() {
         return 1;
     }
 
-    // 读取PPG数据
+    
     vector<double> hr_std;
     double value1;
     while (inputFile1 >> value1) {
@@ -234,20 +234,31 @@ int main() {
     }
     inputFile1.close();
 
+   
     plt::figure_size(1200,780);
 
-    plt::plot(hr_std,"r--");
-   //plt::plot(hr_fliter,"b");
-    plt::plot(hr_fft,"g");
+    plt::named_plot("original",hr_std,"r--");
+    //plt::named_plot("peaks",hr_peaks,"y");
+    plt::named_plot("filter_peaks",hr_filter,"b");
+    //plt::named_plot("FFT",hr_fft,"g");
 
     plt::xlim(0,500);
     plt::ylim(50,150);
+
+    plt::legend();
 
     const char* filename = "./figure.png";
     plt::save(filename);
 
 
-    
+   //计算误差 
+   double e_peaks,e_filter,e_fft;
+
+   for (int i=0;i<hr_std.size()-1;i++) {
+    e_fft+=fabs(hr_std[i]-hr_fft[i]);
+   }
+   e_fft/=hr_fft.size();
+   cout << e_fft;
 
 
 

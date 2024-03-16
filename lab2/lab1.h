@@ -71,8 +71,7 @@ vector<double> find_peaks_threshold_par(const vector<double>& data, double f) {
     int i = 0;
     while (i < result_peaks.size() - 2) {
         for (int j = i + 1; j < result_peaks.size() - 1; j++) {
-            int delta_peaks = result_peaks[j] - result_peaks[i];
-            if (f / delta_peaks > high_hr) {
+            if (f / (result_peaks[j] - result_peaks[i]) > high_hr) {
                 if (result_values[j] > result_values[i]) {
                     result_peaks.erase(result_peaks.begin() + i);
                     result_values.erase(result_values.begin() + i);
