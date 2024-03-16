@@ -91,7 +91,7 @@ vector<double> find_peaks_threshold_par(const vector<double>& data, double f) {
 }
 vector<double> find_peaks_after_sliding(const vector<double>& data) {
     const vector<double>& slide_data=sliding(data,20);  
-    vector<double> peaks = find_peaks_threshold_par(slide_data,125);
+    vector<double> peaks = find_peaks_threshold(slide_data,1.2);
 
     return peaks;
 }

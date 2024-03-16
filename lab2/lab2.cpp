@@ -129,26 +129,31 @@ vector<double> long_time_hr_fft(const vector<double>& data, double f) {
         }
         hr_0 = maxIndex*f/4096*60;
         //自行添加心率限制，连续计算的心率变化不超过5bpm
-        /*
-        while (hr.size()>=1&&hr_0-hr.back()>=5.0) {
+        int first=int(0.4*4096/f)+1,last=int(4*4096/f)+1;
+        while (hr.size()>=1&&hr_0-hr.back()>=5.0||hr.size()>=1&&hr.back()-hr_0>=5.0) {
+        if (hr_0-hr.back()>=5.0) {
             maxIndex--;
-            for (i=maxIndex;i>= int(0.4*4096/f)+1; i--) {
-                if (signal[i] > signal[maxIndex]) {
-                    maxIndex = i;//更新峰值
+            last=maxIndex;
+            for (int j=maxIndex;j>= first; j--) {
+                if (signal[j] > signal[maxIndex]) {
+                    maxIndex = j;
                 }
             }
             hr_0=maxIndex*f/4096*60;
+            
         }
-        while (hr.size()>=1&&hr.back()-hr_0>=5.0) {
+        else if (hr.back()-hr_0>=5.0) {
             maxIndex++;
-            for (i=maxIndex;i<= int(4*4096/f)+1; i++) {
-                if (signal[i] > signal[maxIndex]) {
-                    maxIndex = i;//更新峰值
+            first=maxIndex;
+            for (int k=maxIndex;k<= last; k++) {
+                if (signal[k] > signal[maxIndex]) {
+                    maxIndex = k;
                 }
             }
             hr_0=maxIndex*f/4096*60;
         }
-        */
+        }
+        
         hr.push_back(hr_0);
     }
     return hr;
@@ -213,6 +218,39 @@ int main() {
         outputfile3 <<hr_fft[i]<< std::endl;
     }
     outputfile3.close();
+
+    
+    std::ifstream inputFile1("E:/works/Science and Technology Innovation/lab1/lab1-data/ppg_idel_hr.txt");
+    if (!inputFile1.is_open()) {
+        std::cerr << "Unable to open file!" << std::endl;
+        return 1;
+    }
+
+    // 读取PPG数据
+    vector<double> hr_std;
+    double value1;
+    while (inputFile1 >> value1) {
+        hr_std.push_back(value1);
+    }
+    inputFile1.close();
+
+    plt::figure_size(1200,780);
+
+    plt::plot(hr_std,"r--");
+   //plt::plot(hr_fliter,"b");
+    plt::plot(hr_fft,"g");
+
+    plt::xlim(0,500);
+    plt::ylim(50,150);
+
+    const char* filename = "./figure.png";
+    plt::save(filename);
+
+
+    
+
+
+
    
 
  
