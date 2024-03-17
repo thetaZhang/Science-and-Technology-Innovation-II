@@ -8,6 +8,8 @@
 
 namespace plt = matplotlibcpp;
 
+#define delta 4096
+
 using namespace std;
 const double PI = 3.14159265358979323846;
 // 定义复数类型
@@ -90,11 +92,9 @@ void my_fft(vector<double>& data , int N ){
 vector<double> filter_a(const vector<double>& b, const vector<double>& a, const vector<double>& x) {
     vector<double> y; // 用于存储滤波器输出的向量
     y.push_back(b[0] * x[0]); // 初始条件，计算输出y的第一个样本值
-
     // 外层循环遍历输入信号x中的每个样本
     for (int i = 1; i < x.size(); i++) {
         y.push_back(0); // 初始化输出y的当前样本值为0
-
         // 计算当前输出y的样本值
         for (int j = 0; j < b.size(); j++) {
             if (i >= j) {
@@ -102,7 +102,6 @@ vector<double> filter_a(const vector<double>& b, const vector<double>& a, const 
                 y[i] = y[i] + b[j] * x[i - j];
             }
         }
-
         // 计算当前输出y的样本值，根据差分方程的反馈部分
         for (int l = 0; l < a.size() - 1; l++) {
             if (i > l) {
@@ -111,7 +110,7 @@ vector<double> filter_a(const vector<double>& b, const vector<double>& a, const 
             }
         }
     }
-    return y ; // 
+    return y ; 
 }
 
 vector<double> long_time_hr_fft(const vector<double>& data, double f) {
@@ -120,16 +119,16 @@ vector<double> long_time_hr_fft(const vector<double>& data, double f) {
     for (int i = 0; i < int(data.size() / f) ; i++) {
         const std::vector <double>& part_data =std::vector<double>(data.begin() + i*f, data.begin() + (i+8)*f);
         vector<double>signal=part_data;
-        my_fft(signal,4096);//调用FFT函数
-        int maxIndex = int(0.4*4096/f)+1;//初始化最大幅值的位置
-        for (int i = int(0.4*4096/f)+1; i <= int(4*4096/f)+1; ++i) {
+        my_fft(signal,delta);//调用FFT函数
+        int maxIndex = int(0.4*delta/f)+1;//初始化最大幅值的位置
+        for (int i = int(0.4*delta/f)+1; i <= int(4*delta/f)+1; ++i) {
             if (signal[i] > signal[maxIndex]) {
                 maxIndex = i;//更新峰值
             }
         }
-        hr_0 = maxIndex*f/4096*60;
+        hr_0 = maxIndex*f/delta*60;
         //自行添加心率限制，连续计算的心率变化不超过5bpm
-        int first=int(0.4*4096/f)+1,last=int(4*4096/f)+1;
+        int first=int(0.4*delta/f)+1,last=int(4*delta/f)+1;
         while (hr.size()>=1&&hr_0-hr.back()>=5.0||hr.size()>=1&&hr.back()-hr_0>=5.0) {
         if (hr_0-hr.back()>=5.0) {
             maxIndex--;
@@ -139,7 +138,7 @@ vector<double> long_time_hr_fft(const vector<double>& data, double f) {
                     maxIndex = j;
                 }
             }
-            hr_0=maxIndex*f/4096*60;
+            hr_0=maxIndex*f/delta*60;
             
         }
         else if (hr.back()-hr_0>=5.0) {
@@ -150,7 +149,7 @@ vector<double> long_time_hr_fft(const vector<double>& data, double f) {
                     maxIndex = k;
                 }
             }
-            hr_0=maxIndex*f/4096*60;
+            hr_0=maxIndex*f/delta*60;
         }
         }
         
@@ -162,7 +161,7 @@ vector<double> long_time_hr_fft(const vector<double>& data, double f) {
 // 主函数
 int main() {
         // 打开数据文件
-    std::ifstream inputFile("E:/works/Science and Technology Innovation/lab2/lab2-data/ppg_noise_ma.txt");
+    std::ifstream inputFile("E:/works/Science and Technology Innovation/lab2/lab2-data/ppg_real_jz.txt");
     if (!inputFile.is_open()) {
         std::cerr << "Unable to open file!" << std::endl;
         return 1;
@@ -176,15 +175,98 @@ int main() {
     }
     inputFile.close();
 
+     // 打开数据文件
+    std::ifstream inputFile2("E:/works/Science and Technology Innovation/lab2/lab2-data/ppg_real_jz2.txt");
+    if (!inputFile2.is_open()) {                             
+        std::cerr << "Unable to open file!" << std::endl;
+        return 1;
+    }
+
+    // 读取PPG数据
+    vector<double> ppgData2;                              
+    double value2;                                        
+    while (inputFile2 >> value2) {
+        ppgData2.push_back(value2);                      
+    }
+    inputFile2.close();       
+
     //case1
     vector<double> a={ 1,  -7.512197136829217,  24.714495153604016, -46.51050681663608,  54.76383502861361, -41.313201762614305,  19.500377607032725, -5.2655468955662 , 0.622744822608258};
     vector<double> b={ 0.00005346553295137725, 0, -0.000213862131805509,  0, 0.0003207931977082635, 0, -0.000213862131805509,  0, 0.00005346553295137725};
 
-    std::vector<double> hr_peaks = long_time_hr(ppgData,125);
+    //std::vector<double> hr_peaks = long_time_hr(ppgData,125);
     vector<double> ppgData_filter=filter_a(b,a,ppgData);
-    std::vector<double> hr_filter = long_time_hr(ppgData_filter,125);
+    //std::vector<double> hr_filter = long_time_hr(ppgData_filter,125);
     std::vector<double> hr_fft = long_time_hr_fft(ppgData_filter,125);
+    
 
+    vector<double> ppgData_filter2=filter_a(b,a,ppgData2);
+    std::vector<double> hr_fft2 = long_time_hr_fft(ppgData_filter2,125);
+    
+    std::ofstream outputfile1;
+    outputfile1.open("E:/works/Science and Technology Innovation/lab2/out1.txt");
+    if (!outputfile1) {
+        std::cerr << "Unable to open output file!" << std::endl;
+         return 1;
+    }
+    for(int i=0;i<hr_fft.size();++i){
+        outputfile1 <<hr_fft[i]<< std::endl;
+    }
+    outputfile1.close();
+   
+    std::ofstream outputfile2;
+    outputfile2.open("E:/works/Science and Technology Innovation/lab2/out2.txt");
+    if (!outputfile2) {
+        std::cerr << "Unable to open output file!" << std::endl;
+         return 1;
+    }
+    for(int i=0;i<hr_fft2.size();++i){
+        outputfile2 << hr_fft2[i]<< std::endl;
+    }
+    outputfile2.close();
+
+    
+    /*绘制部分波形
+    double hr_0;
+    const vector<double> & ppgData_fliter_part = vector<double>(ppgData_filter.begin()+125 , ppgData_filter.begin() + 9*125);
+    vector<double> part_signal = ppgData_fliter_part;
+
+    plt::figure_size(1200,780);
+
+    plt::plot(part_signal);
+    plt::xlim(0,1000);
+    plt::ylim(-0.5,0.5);
+
+    const char* filename = "./figure.png";
+    plt::save(filename);
+
+
+
+   
+    my_fft(part_signal,delta); 
+    int maxIndex = int(0.4*delta/125)+1;
+        for (int i = int(0.4*delta/125)+1; i <= int(4*delta/125)+1; ++i) {
+            if (part_signal[i] > part_signal[maxIndex]) {
+                maxIndex = i;
+            }
+        }
+        hr_0 = maxIndex*125.0/delta*60;
+        cout << hr_0;
+
+
+    plt::figure_size(1200,780);
+
+    plt::plot(part_signal);
+    plt::xlim(0,300);
+    plt::ylim(0,50);
+
+    const char* filename = "./figure.png";
+    plt::save(filename);
+
+
+
+
+    
     // 输出结果
     std::ofstream outputfile1;
     outputfile1.open("E:/works/Science and Technology Innovation/lab2/out_peaks.txt");
@@ -239,8 +321,8 @@ int main() {
 
     plt::named_plot("original",hr_std,"r--");
     //plt::named_plot("peaks",hr_peaks,"y");
-    plt::named_plot("filter_peaks",hr_filter,"b");
-    //plt::named_plot("FFT",hr_fft,"g");
+    //plt::named_plot("filter_peaks",hr_filter,"b");
+    plt::named_plot("FFT",hr_fft,"g");
 
     plt::xlim(0,500);
     plt::ylim(50,150);
@@ -259,7 +341,7 @@ int main() {
    }
    e_fft/=hr_fft.size();
    cout << e_fft;
-
+    */
 
 
    
@@ -268,11 +350,6 @@ int main() {
 
     
 
-    //尝试单独输出某一段PPG信号的FFT结果并打印
-    //ppgData_fliter_part=？
-    // vector<double>signal_part=part_data;
-    //my_fft(ppgData_fliter_part,4096); //改变点数，观察效果
-    //打印ppgData_fliter_part
 
 
     return 0;
