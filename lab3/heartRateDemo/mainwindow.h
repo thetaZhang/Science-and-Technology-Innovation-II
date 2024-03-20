@@ -25,9 +25,9 @@ private slots:
 //        m_heartRateSensor->stopSample();
 //    }
 
-    void onHeartRateRawDataSignalCb(std::vector<float> rawdata);    // 原始数据回调
+    void onHeartRateRawDataSignalCb(std::vector<double> rawdata);    // 原始数据回调
 
-    void onHeartRateSignalCb(float heartRate);                      // 心率回调
+    void onHeartRateSignalCb(double heartRate);                      // 心率回调
 
 private:
     Ui::MainWindow *ui;                                          // ui

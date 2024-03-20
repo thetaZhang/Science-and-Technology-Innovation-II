@@ -29,13 +29,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::onHeartRateRawDataSignalCb(std::vector<float> rawdata){
+void MainWindow::onHeartRateRawDataSignalCb(std::vector<double> rawdata){
     for(int i = 0; i < rawdata.size(); i++){
         ui->graphicsView->pushdata(rawdata[i]);                                                                             // push新的数据到波形显示
     }
 }
 
-void MainWindow::onHeartRateSignalCb(float heartRate){
+void MainWindow::onHeartRateSignalCb(double heartRate){
     ui->label->setText(QString::number(heartRate));                                                                         // 设置新的心率值显示
 }
 
