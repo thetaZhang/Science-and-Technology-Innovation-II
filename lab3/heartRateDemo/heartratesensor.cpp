@@ -13,7 +13,7 @@ HeartRateSensor::HeartRateSensor()
     : QObject{nullptr}
 {
     // ????$)A0f???;6
-    std::ifstream inputFile("./lab3-data/ppg_idel_480s.txt");// ??????$)Ae:??ifstream?=f?h/;e?txt??;6
+    std::ifstream inputFile("./lab3-data/ppg_real_jz.txt");// ??????$)Ae:??ifstream?=f?h/;e?txt??;6
     if (!inputFile.is_open()) {                             //???txt??$)A;6?:g?????????
         cerr << "Unable to open file!" << endl;
         exit(-1);
