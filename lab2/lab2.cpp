@@ -4,9 +4,9 @@
 #include <cmath>
 #include <fstream>
 #include "lab1.h"
-#include "matplotlibcpp.h"
+//#include "matplotlibcpp.h"
 
-namespace plt = matplotlibcpp;
+//namespace plt = matplotlibcpp;
 
 #define delta 4096
 
@@ -161,7 +161,7 @@ vector<double> long_time_hr_fft(const vector<double>& data, double f) {
 // 主函数
 int main() {
         // 打开数据文件
-    std::ifstream inputFile("E:/works/Science and Technology Innovation/lab2/lab2-data/ppg_real_jz.txt");
+    std::ifstream inputFile("./lab2-data/ppg_real_jz.txt");
     if (!inputFile.is_open()) {
         std::cerr << "Unable to open file!" << std::endl;
         return 1;
@@ -176,7 +176,7 @@ int main() {
     inputFile.close();
 
      // 打开数据文件
-    std::ifstream inputFile2("E:/works/Science and Technology Innovation/lab2/lab2-data/ppg_real_jz2.txt");
+    std::ifstream inputFile2("./lab2-data/ppg_real_jz_2.txt");
     if (!inputFile2.is_open()) {                             
         std::cerr << "Unable to open file!" << std::endl;
         return 1;
@@ -204,7 +204,7 @@ int main() {
     std::vector<double> hr_fft2 = long_time_hr_fft(ppgData_filter2,125);
     
     std::ofstream outputfile1;
-    outputfile1.open("E:/works/Science and Technology Innovation/lab2/out1.txt");
+    outputfile1.open("out1.txt");
     if (!outputfile1) {
         std::cerr << "Unable to open output file!" << std::endl;
          return 1;
@@ -215,7 +215,7 @@ int main() {
     outputfile1.close();
    
     std::ofstream outputfile2;
-    outputfile2.open("E:/works/Science and Technology Innovation/lab2/out2.txt");
+    outputfile2.open("out2.txt");
     if (!outputfile2) {
         std::cerr << "Unable to open output file!" << std::endl;
          return 1;

@@ -17,7 +17,7 @@ HeartRateSensor::HeartRateSensor()
     : QObject{nullptr}
 {
     // ????$)A0f???;6
-    std::ifstream inputFile("./lab3-data/ppg_real_jz.txt");// ??????$)Ae:??ifstream?=f?h/;e?txt??;6
+    std::ifstream inputFile("./lab3-data/ppg_real_jz_2.txt");// ??????$)Ae:??ifstream?=f?h/;e?txt??;6
     if (!inputFile.is_open()) {                             //???txt??$)A;6?:g?????????
         cerr << "Unable to open file!" << endl;
         exit(-1);
@@ -26,7 +26,7 @@ HeartRateSensor::HeartRateSensor()
     // $)Ah/;e?PPG?0f?
     double value;                                        //$)Ad84f???5.?9f?o<???(f?d;6f?d8??f/??h!????
     while (inputFile >> value) {
-        m_ppgData.push_back(value*100);                       //push_back$)Ae0???0g?ppg?0f??>e??0g?e0>i?
+        m_ppgData.push_back(value);                       //push_back$)Ae0???0g?ppg?0f??>e??0g?e0>i?
     }
     inputFile.close();                                  //?$)A3i?txt??;6o<????pg?0f?d;%e?e-????pgData?0g?d8?
 
@@ -166,27 +166,27 @@ double HeartRateSensor::my_fft(double hr_last,vector<double>& data,double f){
     vector<Complex> signal = convertToComplex(data);
 
     // 补零
-    signal.resize(delta,0); 
-    data.resize(delta,0);
+    signal.resize(Delta,0); 
+    data.resize(Delta,0);
 
     // 对信号进行FFT
     vector<Complex> y=fft(signal);
     
-    for (int i = 0; i < delta; ++i) {
+    for (int i = 0; i < Delta; ++i) {
         data[i] = abs(y[i]); // 计算幅度谱
     }
 
     double hr_0; // 本次计算心率
     static int count=0;
-    int maxIndex = int(0.4*delta/f)+1;//初始化最大幅值的位置
-        for (int i = int(0.4*delta/f)+1; i <= int(4*delta/f)+1; ++i) {
+    int maxIndex = int(0.4*Delta/f)+1;//初始化最大幅值的位置
+        for (int i = int(0.4*Delta/f)+1; i <= int(4*Delta/f)+1; ++i) {
             if (data[i] > data[maxIndex]) {
                 maxIndex = i;//更新峰值
             }
         }
-        hr_0 = maxIndex*f/delta*60;
+        hr_0 = maxIndex*f/Delta*60;
         //心率限制，连续计算的心率变化不超过10bpm(2s窗口)
-        int first=int(0.4*delta/f)+1,last=int(4*delta/f)+1;
+        int first=int(0.4*Delta/f)+1,last=int(4*Delta/f)+1;
         while (count!=0&&hr_0-hr_last>=10.0||count!=0&&hr_last-hr_0>=10.0) {
         if (hr_0-hr_last>=10.0) {
             maxIndex--;
@@ -196,7 +196,7 @@ double HeartRateSensor::my_fft(double hr_last,vector<double>& data,double f){
                     maxIndex = j;
                 }
             }
-            hr_0=maxIndex*f/delta*60;
+            hr_0=maxIndex*f/Delta*60;
             
         }
         else if (hr_last-hr_0>=10.0) {
@@ -207,7 +207,7 @@ double HeartRateSensor::my_fft(double hr_last,vector<double>& data,double f){
                     maxIndex = k;
                 }
             }
-            hr_0=maxIndex*f/delta*60;
+            hr_0=maxIndex*f/Delta*60;
         }
         }
     count++;   
@@ -259,7 +259,7 @@ void HeartRateSensor::onDataTimerCb(){
     tempVector.insert(tempVector.end(), addVector.begin(),addVector.end());                                                         // 8s$)Ae???g*??f7;e?2s?0g??0f?
     m_ppgDataHRWindow = tempVector;                                                                                                 // $)Ad84f?g*??h5??e???g*??
 
-    std::vector<double> filter_data=filter_a(b,a,m_ppgDataHRWindow);                                                             // $)Ai&??e/?atah???10????#e93??                                                                                 // ???$)Ae93e?????0f?h???e30e?<f?f5?
+    std::vector<double> filter_data=filter_a(b_fil,a_fil,m_ppgDataHRWindow);                                                             // $)Ai&??e/?atah???10????#e93??                                                                                 // ???$)Ae93e?????0f?h???e30e?<f?f5?
     m_heartRate = my_fft(m_heartRate,filter_data,125);                                                                                    // $)Ah.!g?e???
     emit heartRateSignal(m_heartRate);                                                                                              // $)Ae????>g$:d?!e?
 
