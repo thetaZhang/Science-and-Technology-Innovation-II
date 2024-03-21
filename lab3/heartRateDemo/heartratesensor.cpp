@@ -265,7 +265,7 @@ void HeartRateSensor::onDataTimerCb(){
 
 //    std::cout << "heart rate: " << m_heartRate << std::endl;
     ppgDataWindow_index++;
-    if(ppgDataWindow_index == 30){
+    if(ppgDataWindow_index == int((m_ppgData.size()-250)/250)){
         ppgDataWindow_index = 0;
     }
 
